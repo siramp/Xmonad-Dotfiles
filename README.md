@@ -11,3 +11,4 @@ neofetch/screenfetch
 picom/compton
 xterm (my personal choice)
 xmonad-contrib
+i3-lock
