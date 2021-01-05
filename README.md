@@ -6,9 +6,9 @@ https://github.com/dpayne/cli-visualizer
 
 Setup dependencies:
 htop (or top)
-cli-visualizer
-neofetch/screenfetch
+cli-visualizer (linked above)
+neofetch/screenfetch/pfetch (you are going to have to refer to the first two if you choose them)
 picom/compton
 xterm (my personal choice)
-xmonad-contrib
-i3-lock
+xmonad-contrib (you need the contrib for certain imports)
+i3-lock (not NEEDED but a basic screen-lock utility)
