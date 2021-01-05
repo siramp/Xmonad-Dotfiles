@@ -4,7 +4,9 @@
 import XMonad
 import Data.Monoid
 import XMonad.Util.Run
+import XMonad.Layout.Gaps
 import XMonad.Util.SpawnOnce
+import XMonad.Layout.Spacing
 import System.Exit
 import XMonad.Hooks.ManageDocks
 import qualified DBus as D
@@ -75,14 +77,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     --launch ff
     , ((modm,               xK_p     ), spawn "firefox")
     --vol
-      , ((modm,               xK_F4     ), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
-      , ((modm,               xK_F3     ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")
-      , ((modm,               xK_F2     ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")
-      , ((modm,               xF86XK_AudioRaiseVolume    ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")
-      , ((modm,               xF86XK_AudioLowerVolume    ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")
+      , ((modm,               xK_F8     ), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+      , ((modm,               xK_Up     ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
+      , ((modm,               xK_Down     ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
+      , ((modm,               xF86XK_AudioRaiseVolume    ), spawn "pactl set-sink-volume @DEFAULT_SINK@ +5%")
+      , ((modm,               xF86XK_AudioLowerVolume    ), spawn "pactl set-sink-volume @DEFAULT_SINK@ -5%")
       , ((modm,               xF86XK_AudioMute     ), spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
     -- launch gmrun
     , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+
+    --master settings /gnome
+    , ((modm .|. shiftMask, xK_f     ), spawn "gnome-control-center")
 
     --lock (you need i3lock installed on your system)
     , ((modm .|. shiftMask, xK_x     ), spawn "i3lock -c 000000")
@@ -200,19 +205,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full)
+myLayout = tiled ||| Mirror tiled ||| theg ||| Full
   where
-     -- default tiling algorithm partitions the screen into two panes
-     tiled   = Tall nmaster delta ratio
-
-     -- The default number of windows in the master pane
-     nmaster = 1
-
-     -- Default proportion of screen occupied by master pane
-     ratio   = 1/2
-
-     -- Percent of screen to increment by when resizing panes
-     delta   = 3/100
+    tiled = spacing 35 $ Tall nmaster delta ratio
+    theg = gaps [(U,18), (R,23)] $ Tall 1 (3/100) (1/2) 
+    nmaster = 1
+    ratio = 1/2
+    delta = 3/100
+     
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -277,7 +277,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-     xmproc <- spawnPipe "xmobar -x 0 <path to xmobarrc>"
+     xmproc <- spawnPipe "xmobar -x 0 /home/siramp/.config/taskbarrc"
      xmonad $ docks defaults
 
 
